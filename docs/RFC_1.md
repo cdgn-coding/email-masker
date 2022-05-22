@@ -2,7 +2,7 @@
 
 ## Summary
 
-As stated in the [inception document](./Inception.md), Email Masker
+As stated in the [inception document](./Inception.MD), Email Masker
 is an open-source project to help users have control of who is capable to
 reach them through emails. This document describes the first implementation of Email Masker.
 
@@ -34,6 +34,60 @@ Twilio's [documentation](https://docs.sendgrid.com/for-developers/tracking-event
 
 ### Receiving endpoint parameters
 
+SendGrid parse webhook sends a multipart/form-data request to the endpoint.
+In the context of accordingly redirecting the message, the most relevant parameters of this request are:
+
+* From
+* to
+* Subject
+* Text
+* html
+* attachments
+* attachment-info
+
+The files are present in the multipart/form-data request, and the number of files
+can be identified with the `attachment` parameter, and the filenames along with other
+metadata fields are located in `attachment-info`.
+
+On the other hand, the `to` parameter will hold the *email mask* therefore,
+it will be the input for the redirection mechanism
+
 ## Email masks mapping
+
+The message redirection mechanism is based on a mapping from email masks
+to the user's primary email address. Hence, email masks should have one and only
+one owner.
+
+```plantuml
+@startuml
+left to right direction
+
+entity User {
+    id
+    --
+    email
+    created_at
+    updated_at
+}
+
+entity EmailMask {
+    address
+    --
+    name
+    description
+    user_id
+    enabled
+    created_at
+    updated_at
+}
+
+User ||--o{ EmailMask
+
+@enduml
+```
+
+Moreover, email masks hold an enabled field that indicates if the messages should be
+redirected to the owner's email address or not. As a consequence, the user can choose
+to ignore emails at any moment without having to lose the email mask.
 
 ## Infrastructure
