@@ -28,11 +28,11 @@ func (m *mockedMaskMappingService) GetOwnerEmail(maskAddress string) (string, er
 
 func TestRedirectEmailUseCase(t *testing.T) {
 	email := emails.Email{
-		From:        "john@doe.com",
-		To:          "mask@emailmasker.com",
-		Subject:     "",
-		Content:     "",
-		ContentType: "",
+		From:    "john@doe.com",
+		To:      "mask@emailmasker.com",
+		Subject: "",
+		Content: "",
+		HTML:    "",
 	}
 
 	t.Run("When mask is not found", func(t *testing.T) {

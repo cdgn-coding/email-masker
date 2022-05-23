@@ -22,10 +22,10 @@ func (r redirectEmailUseCase) Execute(email emails.Email) error {
 	}
 
 	err = r.outboundEmailService.Send(emails.Email{
-		To:          ownerEmail,
-		Subject:     email.Subject,
-		Content:     email.Content,
-		ContentType: email.ContentType,
+		To:      ownerEmail,
+		Subject: email.Subject,
+		Content: email.Content,
+		HTML:    email.HTML,
 	})
 
 	if err != nil {
