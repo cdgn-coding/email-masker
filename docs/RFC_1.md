@@ -141,7 +141,7 @@ They offer managed kubernetes, relational databases, and load balancers.
 ## Tech Stack
 
 * Go
-  * Fiber
+  * Gorilla/Mux
 * Typescript
   * Next.js (static site generation)
   * React
