@@ -1,33 +1,9 @@
 package emails
 
-import "fmt"
+import (
+	"errors"
+)
 
-type MaskAddressNotFoundError struct {
-	Err     error
-	Address string
-}
+var MaskAddressNotFoundError = errors.New("mask address not found")
 
-func NewMaskAddressNotFoundError(address string, err error) *MaskAddressNotFoundError {
-	return &MaskAddressNotFoundError{
-		Address: address,
-		Err:     err,
-	}
-}
-
-func (e *MaskAddressNotFoundError) Error() string {
-	return fmt.Sprintf("Mask %s does not exist. %v", e.Address, e.Err)
-}
-
-type OutboundEmailError struct {
-	Err error
-}
-
-func NewOutboundEmailError(err error) *MaskAddressNotFoundError {
-	return &MaskAddressNotFoundError{
-		Err: err,
-	}
-}
-
-func (e *OutboundEmailError) Error() string {
-	return fmt.Sprintf("Error sending email. %v", e.Err)
-}
+var OutboundEmailError = errors.New("error while sending the email")
