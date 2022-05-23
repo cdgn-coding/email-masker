@@ -8,6 +8,10 @@ reach them through emails. This document describes the first implementation of E
 
 ## Domain abstraction
 
+To receive and delivery emails, the application should own a domain.
+Moreover, because Email Masker is a project that values security and transparency,
+the domain will be treated as an input variable throughout all the code.
+
 ## Receiving emails
 
 SendGrid is an all-in-one service for managing emails.
@@ -91,3 +95,49 @@ redirected to the owner's email address or not. As a consequence, the user can c
 to ignore emails at any moment without having to lose the email mask.
 
 ## Infrastructure
+
+### Cloud independence
+
+To maintain this project deployable to any cloud,
+Email Masker will leverage the power of Kubernetes.
+The project is divided into two main components.
+
+* User Facing Frontend is in charge of interacting with the end-user,
+  should be capable of authenticating the user and letting them manage their email masks.
+* Email Masks Service is capable of receiving inbound emails through SendGrid and
+  handling the mappings between masks and users.
+
+The authentication is done by using Auth0, this service allows the application
+to handle logins and JWT authentication without having to implement it inside this project.
+
+```plantuml
+@startuml
+rectangle "User Facing Frontend" as Frontend
+package "Email Masks Service" as EMS {
+    database "Relational DB" as EMSDB
+    rectangle "HTTP Service" as EMSAPI
+}
+rectangle SendGrid
+rectangle Auth0
+
+Frontend --> Auth0
+Frontend --> EMS
+EMSAPI --> EMSDB
+EMSAPI <-down-> SendGrid
+
+@enduml
+```
+
+Inside this proposal of Email Masker, the receiving email endpoint will also send the mail to the corresponding owner,
+having no system intermediaries like queues. This design decision is made to prevent overengineering the first version of the project.
+
+On the other hand, the Cloud provider choosen to kickstart Email Masker is Digital Ocean.
+They offer managed kubernetes, relational databases, and load balancers.
+
+## Tech Stack
+
+* Go
+  * Fiber
+* Typescript
+  * Next.js (static site generation)
+  * React
