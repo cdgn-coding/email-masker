@@ -1,9 +1,13 @@
 package entities
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 type EmailMask struct {
-	Address     string    `json:"address"`
+	gorm.Model
+	Address     string    `json:"address" gorm:"primaryKey"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	UserID      string    `json:"user_id"`

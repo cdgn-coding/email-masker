@@ -1,7 +1,7 @@
 package sendgrid
 
 import (
-	"email-masks-service/src/business/gateways/emails"
+	"email-masks-service/src/business/gateways"
 	"errors"
 	"github.com/sendgrid/sendgrid-go"
 	"gopkg.in/h2non/gock.v1"
@@ -18,7 +18,7 @@ func TestOutboundEmailService(t *testing.T) {
 
 		client := sendgrid.NewSendClient("")
 		emailService := NewOutboundEmailService(client)
-		err := emailService.Send(emails.Email{
+		err := emailService.Send(gateways.Email{
 			From:    "",
 			To:      "",
 			Subject: "",
@@ -40,7 +40,7 @@ func TestOutboundEmailService(t *testing.T) {
 
 		client := sendgrid.NewSendClient("")
 		emailService := NewOutboundEmailService(client)
-		err := emailService.Send(emails.Email{
+		err := emailService.Send(gateways.Email{
 			From:    "",
 			To:      "",
 			Subject: "",

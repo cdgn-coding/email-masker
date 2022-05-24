@@ -1,4 +1,4 @@
-package emails
+package gateways
 
 type Email struct {
 	From    string
