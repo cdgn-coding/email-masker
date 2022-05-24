@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestOutboundEmailService(t *testing.T) {
+func TestOutboundEmailService_Send(t *testing.T) {
 	t.Run("When SendGrid responds OK", func(t *testing.T) {
 		defer gock.Off()
 

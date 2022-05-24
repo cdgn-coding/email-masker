@@ -36,7 +36,7 @@ func (m *mockedUsersService) GetUserByID(userID string) (*entities.User, error) 
 	return args.Get(0).(*entities.User), args.Error(1)
 }
 
-func TestRedirectEmailUseCase(t *testing.T) {
+func TestRedirectEmailUseCase_Execute(t *testing.T) {
 	email := gateways.Email{
 		From:    "john@doe.com",
 		To:      "mask@emailmasker.com",
