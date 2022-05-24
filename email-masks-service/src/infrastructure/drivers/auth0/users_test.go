@@ -1,7 +1,9 @@
 package auth0
 
 import (
+	"email-masks-service/src/business/entities"
 	"github.com/auth0/go-auth0/management"
+	"github.com/stretchr/testify/assert"
 	"gopkg.in/h2non/gock.v1"
 	"testing"
 )
@@ -67,7 +69,7 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 			Reply(200).
 			JSON(auth0User)
 
-		_, err := auth0UsersService.GetUserByID(userID)
+		user, err := auth0UsersService.GetUserByID(userID)
 
 		if !gock.IsDone() {
 			for _, re := range gock.GetUnmatchedRequests() {
@@ -80,5 +82,10 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 		if err != nil {
 			t.Errorf("Expected not to return an error, given %v", err)
 		}
+
+		assert.Equal(t, user, &entities.User{
+			ID:    userID,
+			Email: email,
+		})
 	})
 }
