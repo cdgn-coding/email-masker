@@ -3,8 +3,8 @@ package emails
 import (
 	"email-masks-service/src/business/entities"
 	"email-masks-service/src/business/gateways"
-	"errors"
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"testing"
 )
@@ -65,15 +65,8 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 
 		err := redirectEmailUseCase.Execute(email)
 
-		if err == nil {
-			t.Errorf("Expected to return an error")
-			return
-		}
-
-		if !errors.Is(err, MaskAddressNotFoundError) {
-			t.Errorf("Expected to return a MaskAddressNotFoundError. It was %v", err)
-			return
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, MaskAddressNotFoundError)
 	})
 
 	t.Run("outbound email error", func(t *testing.T) {
@@ -96,15 +89,8 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 
 		err := redirectEmailUseCase.Execute(email)
 
-		if err == nil {
-			t.Errorf("Expected to return an error")
-			return
-		}
-
-		if !errors.Is(err, OutboundEmailError) {
-			t.Errorf("Expected to return a OutboundEmailError")
-			return
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, OutboundEmailError)
 	})
 
 	t.Run("user not found error", func(t *testing.T) {
@@ -127,15 +113,8 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 
 		err := redirectEmailUseCase.Execute(email)
 
-		if err == nil {
-			t.Errorf("Expected not to return an error.")
-			return
-		}
-
-		if !errors.Is(err, UserNotFoundError) {
-			t.Errorf("Expected not to return a UserNotFoundError, given %v", err)
-			return
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, UserNotFoundError)
 	})
 
 	t.Run("success", func(t *testing.T) {
@@ -158,9 +137,6 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 
 		err := redirectEmailUseCase.Execute(email)
 
-		if err != nil {
-			t.Errorf("Expected not to return an error. %v was given", err)
-			return
-		}
+		assert.NoError(t, err)
 	})
 }

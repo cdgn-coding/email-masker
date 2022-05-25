@@ -2,8 +2,8 @@ package sendgrid
 
 import (
 	"email-masks-service/src/business/gateways"
-	"errors"
 	"github.com/sendgrid/sendgrid-go"
+	"github.com/stretchr/testify/assert"
 	"gopkg.in/h2non/gock.v1"
 	"testing"
 )
@@ -26,9 +26,7 @@ func TestOutboundEmailService_Send(t *testing.T) {
 			HTML:    "",
 		})
 
-		if err != nil {
-			t.Errorf("Expected not to return an error, given %v", err)
-		}
+		assert.NoError(t, err)
 	})
 
 	t.Run("error", func(t *testing.T) {
@@ -48,13 +46,7 @@ func TestOutboundEmailService_Send(t *testing.T) {
 			HTML:    "",
 		})
 
-		if err == nil {
-			t.Errorf("Expected to return an error")
-			return
-		}
-
-		if !errors.Is(err, SendGridOutboundEmailError) {
-			t.Errorf("Expected to return an SendGridOutboundEmailError, given %v", err)
-		}
+		assert.Error(t, err)
+		assert.ErrorIs(t, err, SendGridOutboundEmailError)
 	})
 }

@@ -46,9 +46,7 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 			return
 		}
 
-		if err == nil {
-			t.Error("Expected to return an error")
-		}
+		assert.Error(t, err)
 	})
 
 	t.Run("success", func(t *testing.T) {
@@ -71,18 +69,8 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 
 		user, err := auth0UsersService.GetUserByID(userID)
 
-		if !gock.IsDone() {
-			for _, re := range gock.GetUnmatchedRequests() {
-				t.Logf("Failed to match %s", re.URL)
-			}
-			t.Fail()
-			return
-		}
-
-		if err != nil {
-			t.Errorf("Expected not to return an error, given %v", err)
-		}
-
+		assert.Truef(t, gock.IsDone(), "Failed to match requests. %#v", gock.GetUnmatchedRequests())
+		assert.NoError(t, err)
 		assert.Equal(t, user, &entities.User{
 			ID:    userID,
 			Email: email,
