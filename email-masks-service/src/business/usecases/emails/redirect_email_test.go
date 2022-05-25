@@ -45,7 +45,7 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 		HTML:    "",
 	}
 
-	t.Run("When mask is not found", func(t *testing.T) {
+	t.Run("mask not found error", func(t *testing.T) {
 		emailService := new(mockedOutboundEmailService)
 		maskMappingService := new(mockedMaskMappingService)
 		usersService := new(mockedUsersService)
@@ -76,7 +76,7 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 		}
 	})
 
-	t.Run("When there is an error sending the email", func(t *testing.T) {
+	t.Run("outbound email error", func(t *testing.T) {
 		emailService := new(mockedOutboundEmailService)
 		maskMappingService := new(mockedMaskMappingService)
 		usersService := new(mockedUsersService)
@@ -107,7 +107,7 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 		}
 	})
 
-	t.Run("When there is an error obtaining the user", func(t *testing.T) {
+	t.Run("user not found error", func(t *testing.T) {
 		emailService := new(mockedOutboundEmailService)
 		maskMappingService := new(mockedMaskMappingService)
 		usersService := new(mockedUsersService)
@@ -138,7 +138,7 @@ func TestRedirectEmailUseCase_Execute(t *testing.T) {
 		}
 	})
 
-	t.Run("When everything goes alright", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		emailService := new(mockedOutboundEmailService)
 		maskMappingService := new(mockedMaskMappingService)
 		usersService := new(mockedUsersService)

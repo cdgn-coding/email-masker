@@ -9,7 +9,7 @@ import (
 )
 
 func TestOutboundEmailService_Send(t *testing.T) {
-	t.Run("When SendGrid responds OK", func(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
 		defer gock.Off()
 
 		gock.New("https://api.sendgrid.com/v3/mail/send").
@@ -31,7 +31,7 @@ func TestOutboundEmailService_Send(t *testing.T) {
 		}
 	})
 
-	t.Run("When SendGrid responds an error", func(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
 		defer gock.Off()
 
 		gock.New("https://api.sendgrid.com/v3/mail/send").
