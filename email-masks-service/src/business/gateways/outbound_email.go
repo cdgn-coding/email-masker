@@ -1,13 +1,7 @@
 package gateways
 
-type Email struct {
-	From    string
-	To      string
-	Subject string
-	Content string
-	HTML    string
-}
+import "email-masks-service/src/business/entities"
 
 type OutboundEmailService interface {
-	Send(email Email) error
+	Send(email entities.Email) error
 }

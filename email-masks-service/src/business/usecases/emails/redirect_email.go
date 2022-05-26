@@ -1,21 +1,18 @@
 package emails
 
 import (
+	"email-masks-service/src/business/entities"
 	"email-masks-service/src/business/gateways"
 	"fmt"
 )
 
-type RedirectEmailUseCase interface {
-	Execute(email gateways.Email) error
-}
-
-type redirectEmailUseCase struct {
+type RedirectEmailUseCase struct {
 	outboundEmailService gateways.OutboundEmailService
 	maskMappingService   gateways.MaskMappingService
 	usersService         gateways.UsersService
 }
 
-func (r redirectEmailUseCase) Execute(email gateways.Email) error {
+func (r RedirectEmailUseCase) Execute(email entities.Email) error {
 	ownerUserID, err := r.maskMappingService.GetOwnerUserID(email.To)
 	if err != nil {
 		return fmt.Errorf("%v. %w", err, MaskAddressNotFoundError)
@@ -26,7 +23,7 @@ func (r redirectEmailUseCase) Execute(email gateways.Email) error {
 		return fmt.Errorf("%v. %w", err, UserNotFoundError)
 	}
 
-	err = r.outboundEmailService.Send(gateways.Email{
+	err = r.outboundEmailService.Send(entities.Email{
 		To:      user.Email,
 		Subject: email.Subject,
 		Content: email.Content,
@@ -43,8 +40,8 @@ func (r redirectEmailUseCase) Execute(email gateways.Email) error {
 func NewRedirectEmailUseCase(
 	outboundEmailService gateways.OutboundEmailService,
 	maskMappingService gateways.MaskMappingService,
-	usersService gateways.UsersService) *redirectEmailUseCase {
-	return &redirectEmailUseCase{
+	usersService gateways.UsersService) *RedirectEmailUseCase {
+	return &RedirectEmailUseCase{
 		outboundEmailService: outboundEmailService,
 		maskMappingService:   maskMappingService,
 		usersService:         usersService,

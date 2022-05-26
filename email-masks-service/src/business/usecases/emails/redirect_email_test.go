@@ -2,7 +2,6 @@ package emails
 
 import (
 	"email-masks-service/src/business/entities"
-	"email-masks-service/src/business/gateways"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -13,7 +12,7 @@ type mockedOutboundEmailService struct {
 	mock.Mock
 }
 
-func (m *mockedOutboundEmailService) Send(email gateways.Email) error {
+func (m *mockedOutboundEmailService) Send(email entities.Email) error {
 	args := m.Called(email)
 	return args.Error(0)
 }
@@ -37,7 +36,7 @@ func (m *mockedUsersService) GetUserByID(userID string) (*entities.User, error) 
 }
 
 func TestRedirectEmailUseCase_Execute(t *testing.T) {
-	email := gateways.Email{
+	email := entities.Email{
 		From:    "john@doe.com",
 		To:      "mask@emailmasker.com",
 		Subject: "",
