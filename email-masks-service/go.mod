@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/auth0/go-auth0 v0.6.3
 	github.com/go-playground/validator/v10 v10.11.0
+	github.com/gorilla/mux v1.8.0
 	github.com/sendgrid/sendgrid-go v3.11.1+incompatible
 	github.com/spf13/viper v1.12.0
 	github.com/stretchr/testify v1.7.1

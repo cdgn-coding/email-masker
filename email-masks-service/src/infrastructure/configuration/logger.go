@@ -9,6 +9,7 @@ type Logger interface {
 	Info(args ...interface{})
 	Warn(args ...interface{})
 	Error(args ...interface{})
+	Fatal(args ...interface{})
 }
 
 type logger struct {
@@ -42,4 +43,8 @@ func (l logger) Warn(args ...interface{}) {
 
 func (l logger) Error(args ...interface{}) {
 	l.sugarLogger.Error(args...)
+}
+
+func (l logger) Fatal(args ...interface{}) {
+	l.sugarLogger.Fatal(args...)
 }

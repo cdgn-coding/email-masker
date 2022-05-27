@@ -2,17 +2,22 @@ package http
 
 import (
 	sendgridControllers "email-masks-service/src/application/http/controllers/sendgrid"
-	"email-masks-service/src/business/usecases/emails"
+	sendgridMiddlewares "email-masks-service/src/application/http/middlewares/sendgrid"
+	emailUseCases "email-masks-service/src/business/usecases/emails"
 	"email-masks-service/src/infrastructure/configuration"
 	"email-masks-service/src/infrastructure/drivers/auth0"
 	"email-masks-service/src/infrastructure/drivers/postgresql"
 	sendgridServices "email-masks-service/src/infrastructure/drivers/sendgrid"
+	"github.com/gorilla/mux"
 	"github.com/sendgrid/sendgrid-go"
 	"net/http"
 )
 
 type Server struct {
-	sendgridEmailController http.Handler
+	config                        configuration.Config
+	logger                        configuration.Logger
+	sendgridEmailController       http.Handler
+	sendgridSignatureVerification mux.MiddlewareFunc
 }
 
 func NewServer() *Server {
@@ -32,14 +37,22 @@ func NewServer() *Server {
 		config.GetString("auth0.clientSecret"))
 	usersService := auth0.NewAuth0UsersService(managementClient)
 
-	redirectEmailUseCase := emails.NewRedirectEmailUseCase(outboundEmailService, maskMappingService, usersService)
+	redirectEmailUseCase := emailUseCases.NewRedirectEmailUseCase(outboundEmailService, maskMappingService, usersService)
 	sendgridEmailController := sendgridControllers.NewInboundEmailController(redirectEmailUseCase, logger)
+	sendgridSignatureVerification := sendgridMiddlewares.NewSignatureVerificationMiddleware()
 
 	return &Server{
+		config,
+		logger,
 		sendgridEmailController,
+		sendgridSignatureVerification,
 	}
 }
 
 func (s Server) Run() {
-
+	router := mux.NewRouter()
+	sendgridWebhooksRouter := router.PathPrefix("/sendgrid").Subrouter()
+	sendgridWebhooksRouter.Use(s.sendgridSignatureVerification)
+	sendgridWebhooksRouter.Handle("/sendgrid/email", s.sendgridEmailController).Methods(http.MethodPost)
+	s.logger.Fatal(http.ListenAndServe(s.config.GetString("http.port"), router))
 }
