@@ -15,7 +15,7 @@ type config struct {
 }
 
 func (c config) GetString(key string) string {
-	c.cfg.GetString(key)
+	return c.cfg.GetString(key)
 }
 
 func LoadConfig() *config {
