@@ -9,6 +9,10 @@ type PostgresMaskMappingService struct {
 	db *gorm.DB
 }
 
+func NewPostgresMaskMappingService(db *gorm.DB) *PostgresMaskMappingService {
+	return &PostgresMaskMappingService{db: db}
+}
+
 func (p PostgresMaskMappingService) GetOwnerUserID(maskAddress string) (string, error) {
 	emailMask := entities.EmailMask{}
 	err := p.db.First(&emailMask, "address = ?", maskAddress).Error

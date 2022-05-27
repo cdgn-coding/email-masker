@@ -1,7 +1,7 @@
 package sendgrid
 
 import (
-	"email-masks-service/src/business/gateways"
+	"email-masks-service/src/business/entities"
 	"fmt"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -18,7 +18,7 @@ func NewOutboundEmailService(client *sendgrid.Client) *OutboundEmailService {
 	}
 }
 
-func (s *OutboundEmailService) Send(email gateways.Email) error {
+func (s *OutboundEmailService) Send(email entities.Email) error {
 	from := mail.NewEmail("", email.From)
 	to := mail.NewEmail("", email.To)
 	message := mail.NewSingleEmail(from, email.Subject, to, email.Content, email.HTML)

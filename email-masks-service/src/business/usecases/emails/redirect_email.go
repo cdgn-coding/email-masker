@@ -12,7 +12,7 @@ type RedirectEmailUseCase struct {
 	usersService         gateways.UsersService
 }
 
-func (r RedirectEmailUseCase) Execute(email entities.Email) error {
+func (r RedirectEmailUseCase) Execute(email *entities.Email) error {
 	ownerUserID, err := r.maskMappingService.GetOwnerUserID(email.To)
 	if err != nil {
 		return fmt.Errorf("%v. %w", err, MaskAddressNotFoundError)
