@@ -1,0 +1,8 @@
+logger:
+  level: "development"
+sendgrid:
+  clientKey: "clientKey"
+auth0:
+  domain: "domain"
+  clientID: "clientID"
+  clientSecret: "clientSecret"
