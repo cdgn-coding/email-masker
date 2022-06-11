@@ -8,7 +8,7 @@ import (
 type EmailMask struct {
 	gorm.Model
 	Address     string    `json:"address" gorm:"primaryKey"`
-	Name        string    `json:"name"`
+	Name        string    `json:"name" gorm:"unique"`
 	Description string    `json:"description"`
 	UserID      string    `json:"user_id"`
 	Enabled     bool      `json:"enabled"`

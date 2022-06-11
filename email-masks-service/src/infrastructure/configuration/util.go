@@ -6,8 +6,6 @@ const (
 	GoEnvironment          = "GO_ENVIRONMENT"
 	EnvironmentProduction  = "production"
 	EnvironmentDevelopment = "develop"
-
-	Port = "PORT"
 )
 
 func getEnvironment() string {
@@ -17,12 +15,4 @@ func getEnvironment() string {
 func getWd() string {
 	wd, _ := os.Getwd()
 	return wd
-}
-
-func getPort() string {
-	port := os.Getenv(Port)
-	if port == "" {
-		port = ":8080"
-	}
-	return port
 }

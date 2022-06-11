@@ -20,8 +20,9 @@ func (a Auth0UsersService) GetUserByID(userID string) (*entities.User, error) {
 	}
 
 	user := &entities.User{
-		ID:    *auth0User.ID,
-		Email: *auth0User.Email,
+		ID:       *auth0User.ID,
+		Email:    *auth0User.Email,
+		Username: *auth0User.Username,
 	}
 
 	return user, nil

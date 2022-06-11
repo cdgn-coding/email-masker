@@ -50,6 +50,7 @@ func NewServer() *Server {
 }
 
 func (s Server) Run() {
+	s.logger.Info("Starting up server")
 	router := mux.NewRouter()
 	sendgridWebhooksRouter := router.PathPrefix("/sendgrid").Subrouter()
 	sendgridWebhooksRouter.Use(s.sendgridSignatureVerification)
