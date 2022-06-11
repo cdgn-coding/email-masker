@@ -2,6 +2,7 @@ package auth0
 
 import (
 	"email-masks-service/src/business/entities"
+	"fmt"
 	"github.com/auth0/go-auth0/management"
 )
 
@@ -14,7 +15,8 @@ func NewAuth0UsersService(managementClient *management.Management) *Auth0UsersSe
 }
 
 func (a Auth0UsersService) GetUserByID(userID string) (*entities.User, error) {
-	auth0User, err := a.managementClient.User.Read(userID)
+	formattedUserID := fmt.Sprintf("auth0|%s", userID)
+	auth0User, err := a.managementClient.User.Read(formattedUserID)
 	if err != nil {
 		return nil, err
 	}

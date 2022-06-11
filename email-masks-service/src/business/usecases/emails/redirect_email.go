@@ -3,8 +3,11 @@ package emails
 import (
 	"email-masks-service/src/business/entities"
 	"email-masks-service/src/business/gateways"
+	"email-masks-service/src/business/usecases"
 	"fmt"
 )
+
+type IRedirectEmailUseCase = usecases.CommandUseCase[*entities.Email]
 
 type RedirectEmailUseCase struct {
 	outboundEmailService gateways.OutboundEmailService
@@ -15,12 +18,12 @@ type RedirectEmailUseCase struct {
 func (r RedirectEmailUseCase) Execute(email *entities.Email) error {
 	ownerUserID, err := r.maskMappingService.GetOwnerUserID(email.To)
 	if err != nil {
-		return fmt.Errorf("%v. %w", err, MaskAddressNotFoundError)
+		return fmt.Errorf("%w. %v", MaskAddressNotFoundError, err)
 	}
 
 	user, err := r.usersService.GetUserByID(ownerUserID)
 	if err != nil {
-		return fmt.Errorf("%v. %w", err, UserNotFoundError)
+		return fmt.Errorf("%w. %v", UserNotFoundError, err)
 	}
 
 	err = r.outboundEmailService.Send(entities.Email{
@@ -31,7 +34,7 @@ func (r RedirectEmailUseCase) Execute(email *entities.Email) error {
 	})
 
 	if err != nil {
-		return fmt.Errorf("%v. %w", err, OutboundEmailError)
+		return fmt.Errorf("%w. %v", OutboundEmailError, err)
 	}
 
 	return nil

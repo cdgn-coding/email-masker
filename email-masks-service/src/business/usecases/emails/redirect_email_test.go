@@ -21,6 +21,10 @@ type mockedMaskMappingService struct {
 	mock.Mock
 }
 
+func (m *mockedMaskMappingService) CreateMask(mask *entities.EmailMask) (*entities.EmailMask, error) {
+	panic("not implemented")
+}
+
 func (m *mockedMaskMappingService) GetOwnerUserID(maskAddress string) (string, error) {
 	args := m.Called(maskAddress)
 	return args.String(0), args.Error(1)

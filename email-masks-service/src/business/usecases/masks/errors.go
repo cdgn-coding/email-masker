@@ -2,4 +2,5 @@ package masks
 
 import "errors"
 
-var ErrorCreatingMask = errors.New("error creating mask")
+var FetchUserError = errors.New("error fetching user")
+var CreateMaskRecordError = errors.New("error creating mask error")

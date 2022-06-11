@@ -25,7 +25,7 @@ func (s *OutboundEmailService) Send(email entities.Email) error {
 	resp, err := s.client.Send(message)
 
 	if err != nil || resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("%v. %w", err, SendGridOutboundEmailError)
+		return fmt.Errorf("%w. %v", SendGridOutboundEmailError, err)
 	}
 
 	return nil

@@ -9,6 +9,11 @@ type PostgresMaskMappingService struct {
 	db *gorm.DB
 }
 
+func (p PostgresMaskMappingService) CreateMask(mask *entities.EmailMask) (*entities.EmailMask, error) {
+	result := p.db.Create(mask)
+	return mask, result.Error
+}
+
 func NewPostgresMaskMappingService(db *gorm.DB) *PostgresMaskMappingService {
 	return &PostgresMaskMappingService{db: db}
 }

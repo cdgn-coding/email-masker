@@ -1,9 +1,12 @@
 package http
 
 import (
+	"email-masks-service/src/application/http/controllers/masks"
 	sendgridControllers "email-masks-service/src/application/http/controllers/sendgrid"
+	"email-masks-service/src/application/http/middlewares/auth"
 	sendgridMiddlewares "email-masks-service/src/application/http/middlewares/sendgrid"
 	emailUseCases "email-masks-service/src/business/usecases/emails"
+	masks2 "email-masks-service/src/business/usecases/masks"
 	"email-masks-service/src/infrastructure/configuration"
 	"email-masks-service/src/infrastructure/drivers/auth0"
 	"email-masks-service/src/infrastructure/drivers/postgresql"
@@ -17,7 +20,9 @@ type Server struct {
 	config                        configuration.Config
 	logger                        configuration.Logger
 	sendgridEmailController       http.Handler
+	createMaskController          http.Handler
 	sendgridSignatureVerification mux.MiddlewareFunc
+	jwtAuthorization              mux.MiddlewareFunc
 }
 
 func NewServer() *Server {
@@ -41,19 +46,32 @@ func NewServer() *Server {
 	sendgridEmailController := sendgridControllers.NewInboundEmailController(redirectEmailUseCase, logger)
 	sendgridSignatureVerification := sendgridMiddlewares.NewSignatureVerificationMiddleware()
 
+	maskDomain := config.GetString("emails.domain")
+	createMaskUseCase := masks2.NewCreateMaskUseCase(maskMappingService, usersService, maskDomain)
+	createMaskController := masks.NewCreateEmailMaskController(createMaskUseCase, logger)
+
+	jwtAuthorization := auth.NewAuthVerificationHandler()
+
 	return &Server{
-		config,
-		logger,
-		sendgridEmailController,
-		sendgridSignatureVerification,
+		config:                        config,
+		logger:                        logger,
+		sendgridEmailController:       sendgridEmailController,
+		sendgridSignatureVerification: sendgridSignatureVerification,
+		createMaskController:          createMaskController,
+		jwtAuthorization:              jwtAuthorization,
 	}
 }
 
 func (s Server) Run() {
-	s.logger.Info("Starting up server")
+	s.logger.Info("Starting up server", s.config)
 	router := mux.NewRouter()
 	sendgridWebhooksRouter := router.PathPrefix("/sendgrid").Subrouter()
 	sendgridWebhooksRouter.Use(s.sendgridSignatureVerification)
 	sendgridWebhooksRouter.Handle("/sendgrid/email", s.sendgridEmailController).Methods(http.MethodPost)
+
+	webservice := router.PathPrefix("/users/{userID}/masks/email").Subrouter()
+	webservice.Use(s.jwtAuthorization)
+	webservice.Handle("/", s.createMaskController).Methods(http.MethodPost)
+
 	s.logger.Fatal(http.ListenAndServe(s.config.GetString("http.port"), router))
 }

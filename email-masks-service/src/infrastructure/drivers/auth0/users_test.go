@@ -57,9 +57,11 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 
 		userID := "longUserId"
 		email := "userEmail"
+		username := "username"
 		auth0User := management.User{
-			ID:    &userID,
-			Email: &email,
+			ID:       &userID,
+			Email:    &email,
+			Username: &username,
 		}
 
 		gock.New("https:/domain.com").
@@ -71,9 +73,11 @@ func TestAuth0UsersService_GetUserByID(t *testing.T) {
 
 		assert.Truef(t, gock.IsDone(), "Failed to match requests. %#v", gock.GetUnmatchedRequests())
 		assert.NoError(t, err)
-		assert.Equal(t, user, &entities.User{
-			ID:    userID,
-			Email: email,
-		})
+		expected := &entities.User{
+			ID:       userID,
+			Email:    email,
+			Username: username,
+		}
+		assert.Equal(t, expected, user)
 	})
 }

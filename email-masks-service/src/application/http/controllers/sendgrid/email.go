@@ -3,6 +3,7 @@ package sendgrid
 import (
 	"email-masks-service/src/business/entities"
 	"email-masks-service/src/business/usecases"
+	emailUseCases "email-masks-service/src/business/usecases/emails"
 	"email-masks-service/src/infrastructure/configuration"
 	"errors"
 	"fmt"
@@ -12,7 +13,7 @@ import (
 )
 
 type InboundEmailController struct {
-	redirectEmail usecases.CommandUseCase[*entities.Email]
+	redirectEmail emailUseCases.IRedirectEmailUseCase
 	logger        configuration.Logger
 }
 
@@ -55,16 +56,16 @@ func (controller InboundEmailController) parseInboundEmail(request *http.Request
 	inboundEmail, err := inbound.Parse(request)
 
 	if err != nil {
-		return nil, fmt.Errorf("invalid request. %v. %w", err, invalidInboundEmailRequest)
+		return nil, fmt.Errorf("%w. %v", invalidInboundEmailRequest, err)
 	}
 
 	err = inboundEmail.Validate()
 	if err != nil {
-		return nil, fmt.Errorf("invalid request. %v. %w", err, inboundEmailRequestNotSecure)
+		return nil, fmt.Errorf("%w. %v", inboundEmailRequestNotSecure, err)
 	}
 
 	if len(inboundEmail.Envelope.To) > 1 {
-		return nil, fmt.Errorf("invalid request. %v. %w", err, tooMuchRecipients)
+		return nil, fmt.Errorf("%w. %v", tooMuchRecipients, err)
 	}
 
 	email := &entities.Email{
