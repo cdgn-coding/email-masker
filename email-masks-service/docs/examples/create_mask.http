@@ -1,0 +1,5 @@
+POST http://localhost:8080/users/62a51c91f1faae69a0144fb7/masks/email/
+
+{
+  "name": "facebook"
+}

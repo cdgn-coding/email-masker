@@ -1,0 +1,14 @@
+logger:
+  level: "development"
+sendgrid:
+  clientKey: "clientKey"
+auth0:
+  domain: "domain"
+  clientID: "clientID"
+  clientSecret: "clientSecret"
+postgres:
+  dsn: "postgresql://user:pass@localhost:5432/emails"
+email:
+  domain: "service.domain"
+http:
+  port: ":8080"
