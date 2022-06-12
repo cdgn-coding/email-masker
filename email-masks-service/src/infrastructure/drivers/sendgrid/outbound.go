@@ -24,8 +24,12 @@ func (s *OutboundEmailService) Send(email entities.Email) error {
 	message := mail.NewSingleEmail(from, email.Subject, to, email.Content, email.HTML)
 	resp, err := s.client.Send(message)
 
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil {
 		return fmt.Errorf("%w. %v", SendGridOutboundEmailError, err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("%w. Status Code %d", SendGridOutboundEmailError, resp.StatusCode)
 	}
 
 	return nil

@@ -67,7 +67,7 @@ func (s Server) Run() {
 	router := mux.NewRouter()
 	sendgridWebhooksRouter := router.PathPrefix("/sendgrid").Subrouter()
 	sendgridWebhooksRouter.Use(s.sendgridSignatureVerification)
-	sendgridWebhooksRouter.Handle("/sendgrid/email", s.sendgridEmailController).Methods(http.MethodPost)
+	sendgridWebhooksRouter.Handle("/email", s.sendgridEmailController).Methods(http.MethodPost)
 
 	webservice := router.PathPrefix("/users/{userID}/masks/email").Subrouter()
 	webservice.Use(s.jwtAuthorization)

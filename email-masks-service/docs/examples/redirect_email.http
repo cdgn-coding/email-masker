@@ -1,0 +1,38 @@
+POST http://localhost:8080/sendgrid/email
+Subject: Some subject
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="to"
+
+testusername.facebook@maskthe.email
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="from"
+
+noreply@facebook.com
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="envelope"
+
+{"to":["testusername.facebook@maskthe.email"],"from":"noreply@facebook.com"}
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="subject"
+
+Some subject
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="text"
+
+some text
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="html"
+
+<b>some text</b>
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="dkim"
+
+pass
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="SPF"
+
+pass
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+

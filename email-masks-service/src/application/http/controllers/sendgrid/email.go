@@ -68,10 +68,14 @@ func (controller InboundEmailController) parseInboundEmail(request *http.Request
 		return nil, fmt.Errorf("%w. %v", tooMuchRecipients, err)
 	}
 
+	if len(inboundEmail.Envelope.To) == 0 {
+		return nil, fmt.Errorf("%w", invalidInboundEmailRequest)
+	}
+
 	email := &entities.Email{
 		From:    inboundEmail.Envelope.From,
 		To:      inboundEmail.Envelope.To[0],
-		Subject: inboundEmail.Headers["Subject"],
+		Subject: inboundEmail.ParsedValues["subject"],
 		Content: inboundEmail.TextBody,
 		HTML:    inboundEmail.Body["text/html"],
 	}
