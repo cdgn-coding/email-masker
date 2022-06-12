@@ -135,7 +135,7 @@ EMSAPI <-down-> SendGrid
 Inside this proposal of Email Masker, the receiving email endpoint will also send the mail to the corresponding owner,
 having no system intermediaries like queues. This design decision is made to prevent overengineering the first version of the project.
 
-On the other hand, the Cloud provider choosen to kickstart Email Masker is Digital Ocean.
+On the other hand, the Cloud provider chosen to kickstart Email Masker is Digital Ocean.
 They offer managed kubernetes, relational databases, and load balancers.
 
 ## Tech Stack

@@ -39,6 +39,7 @@ unless it is necessary for the main goal.
 * Scalability
 * Cost-effectiveness
 * Security
+* Privacy
 * Cloud independence
 * Availability
 * Failure tolerance
